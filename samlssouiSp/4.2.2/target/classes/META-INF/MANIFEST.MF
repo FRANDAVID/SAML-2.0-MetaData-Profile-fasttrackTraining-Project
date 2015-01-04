@@ -1,0 +1,52 @@
+Manifest-Version: 1.0
+Export-Package: org.wso2.carbon.identity.sso.saml.ui.client;uses:="org
+ .apache.axis2,org.wso2.carbon.identity.sso.saml.stub,org.apache.commo
+ ns.logging,org.apache.axis2.client,org.wso2.carbon.identity.sso.saml.
+ stub.types,org.apache.axis2.context";version="4.2.2",org.wso2.carbon.
+ identity.sso.saml.ui;uses:="org.apache.commons.logging,org.opensaml.x
+ ml.util,org.opensaml.common,org.w3c.dom,org.w3c.dom.bootstrap,org.w3c
+ .dom.ls,org.opensaml,org.wso2.carbon.identity.base,org.opensaml.xml.i
+ o,org.apache.axiom.util,org.opensaml.saml2.core,org.opensaml.xml,org.
+ opensaml.saml2.core.impl,javax.servlet,org.apache.commons.fileupload.
+ disk,org.apache.commons.fileupload,org.wso2.carbon.ui.util,org.apache
+ .commons.fileupload.servlet,org.wso2.carbon.identity.sso.saml.stub.ty
+ pes,javax.servlet.http";version="4.2.2",org.wso2.carbon.identity.sso.
+ saml.ui.session.mgt;uses:="org.apache.commons.logging";version="4.2.2
+ ",org.wso2.carbon.identity.sso.saml.ui.i18n;version="4.2.2"
+Built-By: rajee
+Tool: Bnd-1.43.0
+Bundle-Name: org.wso2.carbon.identity.sso.saml.ui
+Created-By: Apache Maven Bundle Plugin
+Bundle-Vendor: WSO2 Inc
+DynamicImport-Package: *
+Build-Jdk: 1.6.0_45
+Bundle-Version: 4.2.2
+Bnd-LastModified: 1419924495492
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0
+Bundle-Description: SAML Web Browser SSO UI component for WSO2 Carbon
+Import-Package: javax.servlet;version="[2.6.0,3.0.0)",javax.servlet.ht
+ tp;version="[2.6.0,3.0.0)",javax.xml.namespace;version="0.0.0",org.ap
+ ache.axiom.util;resolution:=optional;version="[1.2,2)",org.apache.axi
+ s2;resolution:=optional;version="[1.6,2)",org.apache.axis2.client;res
+ olution:=optional;version="[1.6,2)",org.apache.axis2.context;resoluti
+ on:=optional;version="[1.6,2)",org.apache.commons.fileupload;resoluti
+ on:=optional,org.apache.commons.fileupload.disk;resolution:=optional,
+ org.apache.commons.fileupload.servlet;resolution:=optional,org.apache
+ .commons.logging;version="1.0.4",org.apache.http.client;version="[4.1
+ ,5)",org.opensaml;resolution:=optional;version="[2.4,3)",org.opensaml
+ .common;resolution:=optional;version="[2.4,3)",org.opensaml.saml2.cor
+ e;resolution:=optional;version="[2.4,3)",org.opensaml.saml2.core.impl
+ ;resolution:=optional;version="[2.4,3)",org.opensaml.xml;resolution:=
+ optional;version="[2.4,3)",org.opensaml.xml.io;resolution:=optional;v
+ ersion="[2.4,3)",org.opensaml.xml.util;resolution:=optional;version="
+ [2.4,3)",org.w3c.dom;resolution:=optional,org.w3c.dom.bootstrap;resol
+ ution:=optional,org.w3c.dom.ls;resolution:=optional,org.wso2.carbon.i
+ dentity.base;resolution:=optional;version="[4.2,5)",org.wso2.carbon.i
+ dentity.sso.saml.stub;resolution:=optional;version="[4.2,5)",org.wso2
+ .carbon.identity.sso.saml.stub.types;resolution:=optional;version="[4
+ .2,5)",org.wso2.carbon.ui.util;resolution:=optional;version="[4.2,5)"
+Bundle-DocURL: http://wso2.org
+Carbon-Component: UIBundle
+Bundle-SymbolicName: org.wso2.carbon.identity.sso.saml.ui
+
