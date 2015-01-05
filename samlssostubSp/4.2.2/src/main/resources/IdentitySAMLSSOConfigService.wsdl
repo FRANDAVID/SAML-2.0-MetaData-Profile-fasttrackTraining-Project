@@ -1,4 +1,4 @@
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ax2366="http://base.identity.carbon.wso2.org/xsd" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ax2368="http://model.core.identity.carbon.wso2.org/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ax2372="http://io.java/xsd" xmlns:tns="http://saml.sso.identity.carbon.wso2.org" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax2370="http://dto.saml.sso.identity.carbon.wso2.org/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://saml.sso.identity.carbon.wso2.org">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ax2366="http://base.identity.carbon.wso2.org/xsd" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ax2368="http://model.core.identity.carbon.wso2.org/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ax2372="http://io.java/xsd" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://saml.sso.identity.carbon.wso2.org" xmlns:ax2370="http://dto.saml.sso.identity.carbon.wso2.org/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://saml.sso.identity.carbon.wso2.org">
     <wsdl:documentation>IdentitySAMLSSOConfigService</wsdl:documentation>
     <wsdl:types>
         <xs:schema xmlns:ax2367="http://base.identity.carbon.wso2.org/xsd" xmlns:ax2369="http://model.core.identity.carbon.wso2.org/xsd" xmlns:ax2373="http://io.java/xsd" xmlns:ns="http://org.apache.axis2/xsd" xmlns:ax2371="http://dto.saml.sso.identity.carbon.wso2.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://org.apache.axis2/xsd">
@@ -110,6 +110,20 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="IOException" nillable="true" type="ax2373:IOException"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="addMetadataServiceProviderUrl">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="metadataUrl" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="addMetadataServiceProviderUrlResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax2371:SAMLSSOServiceProviderDTO"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -234,14 +248,20 @@
     <wsdl:message name="getClaimURIsResponse">
         <wsdl:part name="parameters" element="ns1:getClaimURIsResponse"/>
     </wsdl:message>
+    <wsdl:message name="addMetadataServiceProviderUrlRequest">
+        <wsdl:part name="parameters" element="ns1:addMetadataServiceProviderUrl"/>
+    </wsdl:message>
+    <wsdl:message name="addMetadataServiceProviderUrlResponse">
+        <wsdl:part name="parameters" element="ns1:addMetadataServiceProviderUrlResponse"/>
+    </wsdl:message>
+    <wsdl:message name="IdentitySAMLSSOConfigServiceIOException">
+        <wsdl:part name="parameters" element="ns1:IdentitySAMLSSOConfigServiceIOException"/>
+    </wsdl:message>
     <wsdl:message name="addMetadataServiceProviderRequest">
         <wsdl:part name="parameters" element="ns1:addMetadataServiceProvider"/>
     </wsdl:message>
     <wsdl:message name="addMetadataServiceProviderResponse">
         <wsdl:part name="parameters" element="ns1:addMetadataServiceProviderResponse"/>
-    </wsdl:message>
-    <wsdl:message name="IdentitySAMLSSOConfigServiceIOException">
-        <wsdl:part name="parameters" element="ns1:IdentitySAMLSSOConfigServiceIOException"/>
     </wsdl:message>
     <wsdl:message name="isMetadataFileAddedRequest">
         <wsdl:part name="parameters" element="ns1:isMetadataFileAdded"/>
@@ -281,6 +301,12 @@
             <wsdl:input message="tns:getClaimURIsRequest" wsaw:Action="urn:getClaimURIs"/>
             <wsdl:output message="tns:getClaimURIsResponse" wsaw:Action="urn:getClaimURIsResponse"/>
             <wsdl:fault message="tns:IdentitySAMLSSOConfigServiceIdentityException" name="IdentitySAMLSSOConfigServiceIdentityException" wsaw:Action="urn:getClaimURIsIdentitySAMLSSOConfigServiceIdentityException"/>
+        </wsdl:operation>
+        <wsdl:operation name="addMetadataServiceProviderUrl">
+            <wsdl:input message="tns:addMetadataServiceProviderUrlRequest" wsaw:Action="urn:addMetadataServiceProviderUrl"/>
+            <wsdl:output message="tns:addMetadataServiceProviderUrlResponse" wsaw:Action="urn:addMetadataServiceProviderUrlResponse"/>
+            <wsdl:fault message="tns:IdentitySAMLSSOConfigServiceIdentityException" name="IdentitySAMLSSOConfigServiceIdentityException" wsaw:Action="urn:addMetadataServiceProviderUrlIdentitySAMLSSOConfigServiceIdentityException"/>
+            <wsdl:fault message="tns:IdentitySAMLSSOConfigServiceIOException" name="IdentitySAMLSSOConfigServiceIOException" wsaw:Action="urn:addMetadataServiceProviderUrlIdentitySAMLSSOConfigServiceIOException"/>
         </wsdl:operation>
         <wsdl:operation name="addMetadataServiceProvider">
             <wsdl:input message="tns:addMetadataServiceProviderRequest" wsaw:Action="urn:addMetadataServiceProvider"/>
@@ -352,6 +378,21 @@
             </wsdl:output>
             <wsdl:fault name="IdentitySAMLSSOConfigServiceIdentityException">
                 <soap:fault use="literal" name="IdentitySAMLSSOConfigServiceIdentityException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addMetadataServiceProviderUrl">
+            <soap:operation soapAction="urn:addMetadataServiceProviderUrl" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="IdentitySAMLSSOConfigServiceIdentityException">
+                <soap:fault use="literal" name="IdentitySAMLSSOConfigServiceIdentityException"/>
+            </wsdl:fault>
+            <wsdl:fault name="IdentitySAMLSSOConfigServiceIOException">
+                <soap:fault use="literal" name="IdentitySAMLSSOConfigServiceIOException"/>
             </wsdl:fault>
         </wsdl:operation>
         <wsdl:operation name="addMetadataServiceProvider">
@@ -456,6 +497,21 @@
                 <soap12:fault use="literal" name="IdentitySAMLSSOConfigServiceIdentityException"/>
             </wsdl:fault>
         </wsdl:operation>
+        <wsdl:operation name="addMetadataServiceProviderUrl">
+            <soap12:operation soapAction="urn:addMetadataServiceProviderUrl" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="IdentitySAMLSSOConfigServiceIdentityException">
+                <soap12:fault use="literal" name="IdentitySAMLSSOConfigServiceIdentityException"/>
+            </wsdl:fault>
+            <wsdl:fault name="IdentitySAMLSSOConfigServiceIOException">
+                <soap12:fault use="literal" name="IdentitySAMLSSOConfigServiceIOException"/>
+            </wsdl:fault>
+        </wsdl:operation>
         <wsdl:operation name="addMetadataServiceProvider">
             <soap12:operation soapAction="urn:addMetadataServiceProvider" style="document"/>
             <wsdl:input>
@@ -539,6 +595,15 @@
         </wsdl:operation>
         <wsdl:operation name="getClaimURIs">
             <http:operation location="getClaimURIs"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="addMetadataServiceProviderUrl">
+            <http:operation location="addMetadataServiceProviderUrl"/>
             <wsdl:input>
                 <mime:content type="text/xml" part="parameters"/>
             </wsdl:input>
