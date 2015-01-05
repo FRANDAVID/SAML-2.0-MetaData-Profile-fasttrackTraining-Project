@@ -29,6 +29,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,6 +128,25 @@ public class SAMLSSOUIUtil {
         }
 
         return fileContent;
+    }
+
+    public static String getFileContentFromURL(HttpServletRequest request,String metadataURL) throws Exception {
+
+        URL website = new URL(metadataURL);
+        URLConnection connection = website.openConnection();
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(
+                        connection.getInputStream()));
+
+        StringBuilder response = new StringBuilder();
+        String inputLine;
+
+        while ((inputLine = in.readLine()) != null)
+            response.append(inputLine);
+
+        in.close();
+
+        return response.toString();
     }
 
     private static String inputStreamToString(InputStream inputStream) {

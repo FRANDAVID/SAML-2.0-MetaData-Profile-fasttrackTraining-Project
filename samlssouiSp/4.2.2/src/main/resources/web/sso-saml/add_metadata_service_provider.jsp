@@ -480,6 +480,7 @@ function clearAll() {
         String attributeConsumingServiceIndex = "";
         boolean isEditSP = false;
         String fileContent = null;
+        String fileContentFromUrl = null;
 
         String backendServerURL;
         ConfigurationContext configContext1;
@@ -534,6 +535,20 @@ function clearAll() {
 
 
     }
+
+    if (spAction != null && "addServiceProviderFromURL".equals(spAction)) {
+
+                System.out.println("addmetadataURL jsp entered");
+
+                String metaUrl = request.getParameter("metadataURL");
+                fileContentFromUrl = SAMLSSOUIUtil.getFileContentFromURL(request,metaUrl);
+                System.out.println(fileContentFromUrl);
+
+
+
+
+        }
+
 
 
 /*     String existingIssuers = "";

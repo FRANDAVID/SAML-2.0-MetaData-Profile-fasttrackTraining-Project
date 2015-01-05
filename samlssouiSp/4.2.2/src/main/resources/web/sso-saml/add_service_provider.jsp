@@ -1166,6 +1166,11 @@ if (isEditSP && show) {
         		Select Metadata file to upload: <input type="file" id="metaFile" name="metaFile" size="60" /><br />
                 <input type="submit" value="upload file" />
 </form>
+<form method='post' action='add_metadata_service_provider.jsp?SPAction=addServiceProviderFromURL&spName=<%=request.getParameter("spName")%>' >
+
+        		Enter the metadata URL <input type="text" id="metadataURL" name="metadataURL" /><br />
+                <input type="submit" value="Get metadata from URL" />
+</form>
 </div>
 </div>
 </fmt:bundle>

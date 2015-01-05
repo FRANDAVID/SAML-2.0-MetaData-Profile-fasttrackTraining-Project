@@ -45,8 +45,8 @@ public class SAMLSSOConfigServiceClient {
             option.setManageSession(true);
             option.setProperty(org.apache.axis2.transport.http.HTTPConstants.COOKIE_STRING, cookie);
         } catch (AxisFault ex) {
-            log.error("Error generating stub for IdentitySAMLSSOConfigService",ex);
-            throw new AxisFault("Error generating stub for IdentitySAMLSSOConfigService",ex);
+            log.error("Error generating stub for IdentitySAMLSSOConfigService", ex);
+            throw new AxisFault("Error generating stub for IdentitySAMLSSOConfigService", ex);
         }
     }
 
@@ -61,30 +61,30 @@ public class SAMLSSOConfigServiceClient {
         }
         return status;
     }
-    
+
     // TODO : remove bellow method once above is fixed
     // this kills performance
     public SAMLSSOServiceProviderDTO getServiceProvider(String issuer) throws AxisFault {
-    	try {
-			SAMLSSOServiceProviderInfoDTO dto = stub.getServiceProviders();
-			SAMLSSOServiceProviderDTO[] sps = dto.getServiceProviders();
-			for(SAMLSSOServiceProviderDTO sp : sps) {
-				if(sp.getIssuer().equals(issuer)) {
-					return sp;
-				}
-			}
-		} catch (Exception e) {
-			log.error("Error retrieving service provider information", e);
+        try {
+            SAMLSSOServiceProviderInfoDTO dto = stub.getServiceProviders();
+            SAMLSSOServiceProviderDTO[] sps = dto.getServiceProviders();
+            for (SAMLSSOServiceProviderDTO sp : sps) {
+                if (sp.getIssuer().equals(issuer)) {
+                    return sp;
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error retrieving service provider information", e);
             throw new AxisFault(e.getMessage(), e);
-		}
-		return null; 
-    	
+        }
+        return null;
+
     }
 
     public SAMLSSOServiceProviderInfoDTO getRegisteredServiceProviders() throws AxisFault {
         try {
-        	SAMLSSOServiceProviderInfoDTO spInfo =  stub.getServiceProviders();
-        	return spInfo;
+            SAMLSSOServiceProviderInfoDTO spInfo = stub.getServiceProviders();
+            return spInfo;
         } catch (Exception e) {
             log.error("Error retrieving service provider information", e);
             throw new AxisFault(e.getMessage(), e);
@@ -94,9 +94,9 @@ public class SAMLSSOConfigServiceClient {
     public ArrayList<String> getCertAlias() throws AxisFault {
         ArrayList<String> certAliasList = new ArrayList<String>();
         String[] certAliases;
-        try{
+        try {
             certAliases = stub.getCertAliasOfPrimaryKeyStore();
-            for(String alias : certAliases){
+            for (String alias : certAliases) {
                 certAliasList.add(alias);
             }
         } catch (Exception e) {
@@ -114,16 +114,16 @@ public class SAMLSSOConfigServiceClient {
             throw new AxisFault(e.getMessage(), e);
         }
     }
-    
+
     public String[] getClaimURIs() throws AxisFault {
-    	String[] claimUris = null;
-    	try {
-	        claimUris = stub.getClaimURIs();
+        String[] claimUris = null;
+        try {
+            claimUris = stub.getClaimURIs();
         } catch (Exception e) {
-        	 log.error("Error when reading claims", e);
-             throw new AxisFault(e.getMessage(), e);
+            log.error("Error when reading claims", e);
+            throw new AxisFault(e.getMessage(), e);
         }
-    	return claimUris;
+        return claimUris;
     }
 
     public String addMetadataServiceProviderFileContentOnly(String fileContent, String issuer) throws AxisFault {
@@ -131,7 +131,7 @@ public class SAMLSSOConfigServiceClient {
         //boolean status = false;
         String strstatus;
         try {
-            strstatus = stub.isMetadataFileAdded(fileContent,issuer);
+            strstatus = stub.isMetadataFileAdded(fileContent, issuer);
             System.out.println(strstatus);
 
         } catch (Exception e) {
@@ -154,4 +154,15 @@ public class SAMLSSOConfigServiceClient {
         return samlssoServiceProviderDTO;
     }
 
+    public SAMLSSOServiceProviderDTO addMetadataServiceProviderSAMLObjectOnlyFromURL(String fileContent) throws AxisFault {
+
+        SAMLSSOServiceProviderDTO samlssoServiceProviderDTO;
+        try {
+            samlssoServiceProviderDTO = stub.addMetadataServiceProviderUrl(fileContent);
+        } catch (Exception e) {
+            log.error("Error adding a new Service Provider file 2", e);
+            throw new AxisFault(e.getMessage(), e);
+        }
+        return samlssoServiceProviderDTO;
+    }
 }
