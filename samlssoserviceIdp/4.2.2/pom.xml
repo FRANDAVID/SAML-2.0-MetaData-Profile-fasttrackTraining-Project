@@ -61,6 +61,16 @@
             <artifactId>org.wso2.carbon.identity.application.common</artifactId>
             <version>4.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.identity.core</artifactId>
+            <version>4.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.identity.core</artifactId>
+            <version>4.2.3</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -26,10 +26,14 @@ import org.wso2.carbon.identity.application.common.IdentityApplicationManagement
 import org.wso2.carbon.identity.application.common.model.FederatedAuthenticatorConfig;
 import org.wso2.carbon.identity.application.common.model.IdentityProvider;
 import org.wso2.carbon.identity.application.common.model.ProvisioningConnectorConfig;
+import org.wso2.carbon.identity.base.IdentityException;
+import org.wso2.carbon.idp.mgt.dto.SAMLSSOIdentityProviderDTO;
 import org.wso2.carbon.idp.mgt.internal.IdpMgtListenerServiceComponent;
 import org.wso2.carbon.idp.mgt.listener.IdentityProviderMgtLister;
+import org.wso2.carbon.idp.mgt.metadata.SAMLSSOMetadataConfigManager;
 import org.wso2.carbon.user.api.ClaimMapping;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +44,7 @@ public class IdentityProviderManagementService extends AbstractAdmin {
 
     /**
      * Retrieves resident Identity provider for the logged-in tenant
-     * 
+     *
      * @return <code>IdentityProvider</code>
      * @throws IdentityApplicationManagementException Error when getting Resident Identity Provider
      */
@@ -54,28 +58,28 @@ public class IdentityProviderManagementService extends AbstractAdmin {
 
     /**
      * Updated resident Identity provider for the logged-in tenant
-     * 
+     *
      * @param identityProvider <code>IdentityProvider</code>
      * @throws IdentityApplicationManagementException Error when getting Resident Identity Provider
      */
     public void updateResidentIdP(IdentityProvider identityProvider)
             throws IdentityApplicationManagementException {
 
-    	// invoking the listeners
-    	List<IdentityProviderMgtLister> listerns = IdpMgtListenerServiceComponent.getListners();
-    	for(IdentityProviderMgtLister listner : listerns) {
-    		listner.updateResidentIdP(identityProvider);
-    	}
-    	
+        // invoking the listeners
+        List<IdentityProviderMgtLister> listerns = IdpMgtListenerServiceComponent.getListners();
+        for (IdentityProviderMgtLister listner : listerns) {
+            listner.updateResidentIdP(identityProvider);
+        }
+
         String tenantDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
         IdentityProviderManager.getInstance().updateResidentIdP(identityProvider, tenantDomain);
     }
 
     /**
      * Retrieves registered Identity providers for the logged-in tenant
-     * 
+     *
      * @return Array of <code>IdentityProvider</code>. IdP names, primary IdP and home
-     *         realm identifiers of each IdP
+     * realm identifiers of each IdP
      * @throws IdentityApplicationManagementException Error when getting list of Identity Providers
      */
     public IdentityProvider[] getAllIdPs() throws IdentityApplicationManagementException {
@@ -85,12 +89,12 @@ public class IdentityProviderManagementService extends AbstractAdmin {
         return identityProviders.toArray(new IdentityProvider[identityProviders.size()]);
     }
 
-    
+
     /**
      * Retrieves Enabled registered Identity providers for the logged-in tenant
-     * 
+     *
      * @return Array of <code>IdentityProvider</code>. IdP names, primary IdP and home
-     *         realm identifiers of each IdP
+     * realm identifiers of each IdP
      * @throws IdentityApplicationManagementException Error when getting list of Identity Providers
      */
     public IdentityProvider[] getEnabledAllIdPs() throws IdentityApplicationManagementException {
@@ -99,11 +103,11 @@ public class IdentityProviderManagementService extends AbstractAdmin {
         List<IdentityProvider> identityProviders = IdentityProviderManager.getInstance().getEnabledIdPs(tenantDomain);
         return identityProviders.toArray(new IdentityProvider[identityProviders.size()]);
     }
-    
-    
+
+
     /**
      * Retrieves Identity provider information for the logged-in tenant by Identity Provider name
-     * 
+     *
      * @param idPName Unique name of the Identity provider of whose information is requested
      * @return <code>IdentityProvider</code> Identity Provider information
      * @throws IdentityApplicationManagementException
@@ -117,42 +121,41 @@ public class IdentityProviderManagementService extends AbstractAdmin {
 
     /**
      * Adds an Identity Provider to the logged-in tenant
-     * 
+     *
      * @param identityProvider <code>IdentityProvider</code> new Identity Provider information
      * @throws IdentityApplicationManagementException Error when adding Identity Provider
      */
     public void addIdP(IdentityProvider identityProvider)
             throws IdentityApplicationManagementException {
 
-    	// invoking the listeners
-    	List<IdentityProviderMgtLister> listerns = IdpMgtListenerServiceComponent.getListners();
-    	for(IdentityProviderMgtLister listner : listerns) {
-    		listner.addIdP(identityProvider);
-    	}
-    	
+        // invoking the listeners
+        List<IdentityProviderMgtLister> listerns = IdpMgtListenerServiceComponent.getListners();
+        for (IdentityProviderMgtLister listner : listerns) {
+            listner.addIdP(identityProvider);
+        }
+
         String tenantDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
         IdentityProviderManager.getInstance().addIdP(identityProvider, tenantDomain);
     }
 
     /**
      * Deletes an Identity Provider from the logged-in tenant
-     * 
+     *
      * @param idPName Name of the IdP to be deleted
      * @throws IdentityApplicationManagementException Error when deleting Identity Provider
      */
-    public void deleteIdP(String idPName) throws IdentityApplicationManagementException {    	
+    public void deleteIdP(String idPName) throws IdentityApplicationManagementException {
         String tenantDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
         IdentityProviderManager.getInstance().deleteIdP(idPName, tenantDomain);
-        
+
         // invoking the listeners
         List<IdentityProviderMgtLister> listerns = IdpMgtListenerServiceComponent.getListners();
-        for(IdentityProviderMgtLister listner : listerns) {
+        for (IdentityProviderMgtLister listner : listerns) {
             listner.deleteIdP(idPName);
         }
     }
 
     /**
-     * 
      * @return
      * @throws IdentityApplicationManagementException
      */
@@ -175,8 +178,8 @@ public class IdentityProviderManagementService extends AbstractAdmin {
 
     /**
      * Updates a given Identity Provider's information in the logged-in tenant
-     * 
-     * @param oldIdPName existing Identity Provider name
+     *
+     * @param oldIdPName       existing Identity Provider name
      * @param identityProvider <code>IdentityProvider</code> new Identity Provider information
      * @throws IdentityApplicationManagementException Error when updating Identity Provider
      */
@@ -184,11 +187,11 @@ public class IdentityProviderManagementService extends AbstractAdmin {
             throws IdentityApplicationManagementException {
 
 
-    	// invoking the listeners
-    	List<IdentityProviderMgtLister> listerns = IdpMgtListenerServiceComponent.getListners();
-    	for(IdentityProviderMgtLister listner : listerns) {
-    		listner.updateIdP(oldIdPName, identityProvider);
-    	}
+        // invoking the listeners
+        List<IdentityProviderMgtLister> listerns = IdpMgtListenerServiceComponent.getListners();
+        for (IdentityProviderMgtLister listner : listerns) {
+            listner.updateIdP(oldIdPName, identityProvider);
+        }
         String tenantDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
         IdentityProviderManager.getInstance().updateIdP(oldIdPName, identityProvider, tenantDomain);
     }
@@ -202,8 +205,44 @@ public class IdentityProviderManagementService extends AbstractAdmin {
     public FederatedAuthenticatorConfig[] getAllFederatedAuthenticators() throws IdentityApplicationManagementException {
         return IdentityProviderManager.getInstance().getAllFederatedAuthenticators();
     }
-    
+
     public ProvisioningConnectorConfig[] getAllProvisioningConnectors() throws IdentityApplicationManagementException {
-    	return IdentityProviderManager.getInstance().getAllProvisioningConnectors();
+        return IdentityProviderManager.getInstance().getAllProvisioningConnectors();
+    }
+
+    /**
+     * add SAML SSO object by uploading file from local system
+     *
+     * @param fileContent content of a file
+     * @return SAMLSSOIdentityProviderDTO
+     * @throws org.wso2.carbon.identity.base.IdentityException
+     */
+    public SAMLSSOIdentityProviderDTO addMetadataServiceProvider(String fileContent) throws IdentityException, IOException {
+        System.out.println("backend  read service provider from file hit" + fileContent.length());
+
+        SAMLSSOMetadataConfigManager metadataConfigManager = new SAMLSSOMetadataConfigManager(getConfigUserRegistry());
+        //fileAddedReg = metadataConfigManager.addMetadataSAMLSSOFileResource(fileContent,SAMLSSOMetadataConfigManager.issuer);
+        return metadataConfigManager.readServiceProvidersFromFile(fileContent);
+    }
+
+    /**
+     * check metadata file is added to registry
+     *
+     * @param fileContent content of a file
+     * @return boolean
+     * @throws IdentityException
+     */
+    public String isMetadataFileAdded(String fileContent, String issuer) throws IdentityException {
+        boolean fileAddedStatus = false;
+        String fileAddedStatusS;
+        System.out.println("add metadata service hit");
+        SAMLSSOMetadataConfigManager metadataConfigManager = new SAMLSSOMetadataConfigManager(getConfigUserRegistry());
+        fileAddedStatus = metadataConfigManager.addMetadataSAMLSSOFileResource(fileContent, issuer);
+        if (fileAddedStatus == true) {
+            fileAddedStatusS = "true";
+        } else {
+            fileAddedStatusS = "false";
+        }
+        return fileAddedStatusS;
     }
 }
