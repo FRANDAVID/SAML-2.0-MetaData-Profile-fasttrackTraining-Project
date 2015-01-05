@@ -23,6 +23,7 @@ import org.opensaml.common.xml.SAMLConstants;
 import org.opensaml.saml2.metadata.AssertionConsumerService;
 import org.opensaml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider;
+import org.opensaml.saml2.metadata.provider.HTTPMetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xml.parse.BasicParserPool;
@@ -36,6 +37,8 @@ import org.wso2.carbon.registry.core.session.UserRegistry;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 
 public class SAMLSSOMetadataConfigManager {
@@ -43,7 +46,6 @@ public class SAMLSSOMetadataConfigManager {
     private static final Log log = LogFactory.getLog(SAMLSSOMetadataConfigManager.class);
     private final UserRegistry registry;
     public static String check = "0";
-
 
 
     public SAMLSSOMetadataConfigManager(Registry userRegistry) {
@@ -97,9 +99,6 @@ public class SAMLSSOMetadataConfigManager {
             serviceProviderDTO.setAssertionConsumerUrl(assertionConsumerServiceURL);
 
 
-
-
-
         } catch (IOException e) {
             log.error("IO exception" + e);
 
@@ -107,14 +106,71 @@ public class SAMLSSOMetadataConfigManager {
             log.error("metadata provider exception" + e);
 
         } catch (ConfigurationException e) {
-            log.error("configuration exception"+e);
+            log.error("configuration exception" + e);
 
-        }
-        finally {
+        } finally {
 
             assert fos != null;
             fos.flush();
             fos.close();
+        }
+
+
+        return serviceProviderDTO;
+
+    }
+
+    /**
+     * read SAML object by uploading SAML metadata file
+     *
+     * @param metadataUrl url of a metadata file
+     * @return SAMLSSOServiceProviderDTO object
+     */
+
+    public SAMLSSOServiceProviderDTO readServiceProvidersFromUrl(String metadataUrl) throws IOException {
+
+        SAMLSSOServiceProviderDTO serviceProviderDTO = new SAMLSSOServiceProviderDTO();
+        String assertionConsumerServiceURL = null;
+
+        URI metadataURI;
+
+        int requestTimeout = 10;
+        try {
+            HTTPMetadataProvider httpMetadataProvider = null;
+            DefaultBootstrap.bootstrap();
+
+            metadataURI = new URI(metadataUrl);
+            httpMetadataProvider = new HTTPMetadataProvider(metadataURI.toString(),requestTimeout);
+            httpMetadataProvider.setRequireValidMetadata(true);
+            httpMetadataProvider.setParserPool(new BasicParserPool());
+            httpMetadataProvider.initialize();
+
+            EntityDescriptor entityDescriptor = (EntityDescriptor) httpMetadataProvider.getMetadata();
+            String issuer = entityDescriptor.getEntityID();
+
+
+            for (AssertionConsumerService acs : entityDescriptor.getSPSSODescriptor(SAMLConstants.SAML20P_NS)
+                    .getAssertionConsumerServices()) {
+                assertionConsumerServiceURL = acs.getLocation();
+
+            }
+            System.out.println("-------------------");
+            System.out.println("issuer name  " + issuer);
+            System.out.println("-------------------");
+            System.out.println("-------------------");
+            System.out.println("assertion consumer service url  " + assertionConsumerServiceURL);
+            System.out.println("-------------------");
+
+            serviceProviderDTO.setIssuer(issuer);
+            serviceProviderDTO.setAssertionConsumerUrl(assertionConsumerServiceURL);
+
+
+        } catch (MetadataProviderException e) {
+            System.out.println("metadataProvider Exception " + e);
+        } catch (ConfigurationException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
 
 
